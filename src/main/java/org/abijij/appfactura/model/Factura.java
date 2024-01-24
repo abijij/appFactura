@@ -82,12 +82,54 @@ public class Factura {
                 .append(this.cliente.getRFC())
                 .append("\nDescripcion: ")
                 .append(this.descripcion)
-                .append("\n")
-                .append("\n#\tNombre\t$\tCantidad\tTotal\n");
+                .append("\n");
 
-        SimpleDateFormat df = new SimpleDateFormat("dd `de` MMMM, yyyy");
-        sb.append("Fecha emision de la factura: ").append(df.format(this.fecha)).append("\n");
+        SimpleDateFormat df = new SimpleDateFormat("dd , MMMM, yyyy");
+        sb.append("Fecha emision de la factura: ")
+                .append(df.format(this.fecha))
+                .append("\n")
+                .append("\n#\tNombre\t$\tDescripcion\tStock\tCantidad\tTotal\n");
+
+        for(ItemFactura item: this.items){
+            if(item == null){
+                continue;
+            }
+            sb.append(item.getProducto().getId())
+                    .append('\t')
+                    .append(item.getProducto().getNombre())
+                    .append("\t")
+                    .append(item.getProducto().getPrecio())
+                    .append("\t")
+                    .append(item.getProducto().getDescripcion())
+                    .append("\t")
+                    .append(item.getProducto().getStock())
+                    .append("\t")
+                    .append(item.getCantidad())
+                    .append("\t")
+                    .append(item.calcularImporters())
+                    .append("\n");
+        }
+        sb.append("\nGran Total de $ ")
+                .append(calcularTotal());
 
         return sb.toString();
+    }
+
+    public static boolean contieneNumeros(String cadena) {
+        for (char c : cadena.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean contieneLetras(String cadena) {
+        for (char c : cadena.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
